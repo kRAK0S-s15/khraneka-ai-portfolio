@@ -6,7 +6,7 @@ import { site } from "@/content/site";
 export const metadata: Metadata = {
   title: `${site.name} — ${site.role}`,
   description: site.tagline,
-  metadataBase: new URL("https://khraneko-ai-portfolio.vercel.app"),
+  metadataBase: new URL("https://khraneka-ai-portfolio.vercel.app"),
   openGraph: {
     title: `${site.name} — ${site.role}`,
     description: site.tagline,
