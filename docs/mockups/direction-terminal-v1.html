@@ -1,0 +1,445 @@
+<style>
+  :root {
+    --bg: #EDF1EF;
+    --surface: #E3E9E6;
+    --surface-2: #D8E0DC;
+    --fg: #1B211E;
+    --muted: #5B6560;
+    --accent: #8A520D;
+    --accent-2: #005f8f;
+    --metric: #2e7602;
+    --border: rgba(27,33,30,0.14);
+    --shadow: rgba(27,33,30,0.10);
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #14120F;
+      --surface: #1D1A15;
+      --surface-2: #262119;
+      --fg: #EDE6D6;
+      --muted: #9C9282;
+      --accent: #E8A33D;
+      --accent-2: #00A9BC;
+      --metric: #7FA65C;
+      --border: rgba(237,230,214,0.14);
+      --shadow: rgba(0,0,0,0.45);
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #14120F; --surface: #1D1A15; --surface-2: #262119; --fg: #EDE6D6;
+    --muted: #9C9282; --accent: #E8A33D; --accent-2: #00A9BC; --metric: #7FA65C;
+    --border: rgba(237,230,214,0.14); --shadow: rgba(0,0,0,0.45); color-scheme: dark;
+  }
+  :root[data-theme="light"] {
+    --bg: #EDF1EF; --surface: #E3E9E6; --surface-2: #D8E0DC; --fg: #1B211E;
+    --muted: #5B6560; --accent: #8A520D; --accent-2: #005f8f; --metric: #2e7602;
+    --border: rgba(27,33,30,0.14); --shadow: rgba(27,33,30,0.10); color-scheme: light;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--fg);
+    font-family: ui-serif, "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, "Times New Roman", serif;
+    font-size: 17px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .mono {
+    font-family: ui-monospace, "SF Mono", "JetBrains Mono", "Fira Code", Menlo, Consolas, "Liberation Mono", monospace;
+  }
+
+  .eyebrow {
+    font-family: ui-monospace, "SF Mono", "JetBrains Mono", "Fira Code", Menlo, Consolas, "Liberation Mono", monospace;
+    font-size: 0.8rem;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+    margin: 0 0 0.9rem;
+    display: flex;
+    align-items: baseline;
+    gap: 0.5em;
+  }
+  .eyebrow::before { content: "#"; color: var(--accent); }
+
+  a { color: var(--accent-2); text-decoration-thickness: 1px; text-underline-offset: 3px; }
+  a:focus-visible, button:focus-visible, .card:focus-visible {
+    outline: 2px solid var(--accent-2);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+
+  h1, h2, h3 { text-wrap: balance; font-weight: 600; margin: 0; }
+
+  .shell {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+  }
+
+  /* ---------- window chrome nav ---------- */
+  .chrome {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background: color-mix(in srgb, var(--bg) 88%, transparent);
+    backdrop-filter: blur(6px);
+    border-bottom: 1px solid var(--border);
+  }
+  .chrome-inner {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 0.8rem 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+  .dots { display: flex; gap: 6px; flex: none; }
+  .dots span { width: 10px; height: 10px; border-radius: 50%; display: block; }
+  .dots span:nth-child(1) { background: #d9776b; }
+  .dots span:nth-child(2) { background: #d9b95c; }
+  .dots span:nth-child(3) { background: var(--metric); }
+  .chrome-path {
+    font-family: ui-monospace, "SF Mono", "JetBrains Mono", "Fira Code", Menlo, Consolas, "Liberation Mono", monospace;
+    font-size: 0.8rem;
+    color: var(--muted);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  nav.chrome-nav {
+    margin-left: auto;
+    display: flex;
+    gap: 1.25rem;
+    font-family: ui-monospace, "SF Mono", "JetBrains Mono", "Fira Code", Menlo, Consolas, "Liberation Mono", monospace;
+    font-size: 0.82rem;
+  }
+  nav.chrome-nav a { color: var(--fg); text-decoration: none; }
+  nav.chrome-nav a:hover { color: var(--accent-2); }
+
+  /* ---------- hero ---------- */
+  .hero { padding: 4rem 0 3rem; }
+  .terminal {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 1.5rem 1.75rem;
+    box-shadow: 0 8px 24px -12px var(--shadow);
+    font-family: ui-monospace, "SF Mono", "JetBrains Mono", "Fira Code", Menlo, Consolas, "Liberation Mono", monospace;
+    font-size: 0.95rem;
+  }
+  .terminal .line { display: flex; gap: 0.6em; margin: 0 0 0.35em; flex-wrap: wrap; }
+  .terminal .prompt { color: var(--accent-2); flex: none; }
+  .terminal .cmd { color: var(--muted); }
+  .terminal .out { color: var(--fg); margin: 0.15em 0 1.1em 1.5em; }
+  .terminal .out .name { font-size: 1.5rem; font-weight: 600; display: block; margin-bottom: 0.2em; }
+  .terminal .out .role { color: var(--muted); }
+  .terminal .out .tagline {
+    font-family: ui-serif, "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, "Times New Roman", serif;
+    font-size: 1.05rem;
+    color: var(--fg);
+    line-height: 1.55;
+    margin-top: 0.6em;
+    max-width: 46ch;
+  }
+  .cursor {
+    display: inline-block;
+    width: 0.55em;
+    height: 1.05em;
+    background: var(--accent);
+    vertical-align: text-bottom;
+    animation: blink 1.1s steps(1) infinite;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .cursor { animation: none; opacity: 1; }
+  }
+  @keyframes blink { 50% { opacity: 0; } }
+
+  .cta-row { display: flex; gap: 0.9rem; margin-top: 1.5rem; flex-wrap: wrap; }
+  .btn {
+    font-family: ui-monospace, "SF Mono", "JetBrains Mono", "Fira Code", Menlo, Consolas, "Liberation Mono", monospace;
+    font-size: 0.85rem;
+    padding: 0.65em 1.1em;
+    border-radius: 5px;
+    text-decoration: none;
+    border: 1px solid var(--border);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5em;
+  }
+  .btn-primary { background: var(--accent); color: var(--bg); border-color: transparent; }
+  .btn-primary:hover { filter: brightness(1.08); }
+  .btn-ghost { color: var(--fg); }
+  .btn-ghost:hover { background: var(--surface); }
+
+  /* ---------- sections ---------- */
+  section { padding: 3rem 0; border-top: 1px solid var(--border); }
+  .about p { max-width: 62ch; color: var(--fg); }
+  .about .meta {
+    margin-top: 1.25rem;
+    font-family: ui-monospace, "SF Mono", "JetBrains Mono", "Fira Code", Menlo, Consolas, "Liberation Mono", monospace;
+    font-size: 0.82rem;
+    color: var(--muted);
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 0.35em 1em;
+    max-width: 46ch;
+  }
+  .about .meta dt { color: var(--muted); }
+  .about .meta dd { margin: 0; color: var(--fg); }
+
+  /* ---------- skills / radar ---------- */
+  .skills-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 320px) 1fr;
+    gap: 2rem;
+    align-items: center;
+  }
+  @media (max-width: 640px) {
+    .skills-grid { grid-template-columns: 1fr; }
+  }
+  .radar-caption {
+    font-family: ui-monospace, "SF Mono", "JetBrains Mono", "Fira Code", Menlo, Consolas, "Liberation Mono", monospace;
+    font-size: 0.72rem;
+    color: var(--muted);
+    text-align: center;
+    margin-top: 0.5rem;
+  }
+  .tag-list { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 1rem; }
+  .tag {
+    font-family: ui-monospace, "SF Mono", "JetBrains Mono", "Fira Code", Menlo, Consolas, "Liberation Mono", monospace;
+    font-size: 0.78rem;
+    padding: 0.35em 0.7em;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    color: var(--fg);
+  }
+  .skills-list h3 {
+    font-family: ui-monospace, "SF Mono", "JetBrains Mono", "Fira Code", Menlo, Consolas, "Liberation Mono", monospace;
+    font-size: 0.85rem;
+    color: var(--muted);
+    font-weight: 500;
+    letter-spacing: 0.03em;
+    margin-bottom: 0.5rem;
+  }
+
+  /* ---------- projects ---------- */
+  .project-grid { display: grid; gap: 1.25rem; margin-top: 1.5rem; }
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.5rem 1.6rem;
+  }
+  .card-head { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; flex-wrap: wrap; }
+  .card-head h3 { font-size: 1.15rem; }
+  .card-head .link {
+    font-family: ui-monospace, "SF Mono", "JetBrains Mono", "Fira Code", Menlo, Consolas, "Liberation Mono", monospace;
+    font-size: 0.8rem;
+    white-space: nowrap;
+  }
+  .card-head .link.pending { color: var(--muted); font-style: italic; }
+  .card p.desc { color: var(--fg); margin: 0.6rem 0 0; max-width: 65ch; }
+  .stat-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    margin: 1.1rem 0;
+    font-family: ui-monospace, "SF Mono", "JetBrains Mono", "Fira Code", Menlo, Consolas, "Liberation Mono", monospace;
+  }
+  .stat { font-variant-numeric: tabular-nums; }
+  .stat .num { font-size: 1.15rem; color: var(--metric); display: block; }
+  .stat .num.pending { color: var(--muted); font-size: 0.95rem; font-style: italic; }
+  .stat .label { font-size: 0.7rem; color: var(--muted); letter-spacing: 0.03em; }
+  .badge-row { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 0.9rem; }
+  .badge {
+    font-family: ui-monospace, "SF Mono", "JetBrains Mono", "Fira Code", Menlo, Consolas, "Liberation Mono", monospace;
+    font-size: 0.72rem;
+    padding: 0.25em 0.55em;
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    color: var(--muted);
+  }
+
+  /* ---------- footer ---------- */
+  footer {
+    padding: 3rem 0 4rem;
+    font-family: ui-monospace, "SF Mono", "JetBrains Mono", "Fira Code", Menlo, Consolas, "Liberation Mono", monospace;
+    font-size: 0.85rem;
+    color: var(--muted);
+  }
+  .contact-row { display: flex; gap: 1.5rem; flex-wrap: wrap; margin-top: 0.75rem; }
+  .contact-row a { color: var(--fg); }
+  .contact-row a:hover { color: var(--accent-2); }
+</style>
+
+<div class="chrome">
+  <div class="chrome-inner">
+    <div class="dots" aria-hidden="true"><span></span><span></span><span></span></div>
+    <span class="chrome-path">khraneka@portfolio:~$</span>
+    <nav class="chrome-nav" aria-label="Primary">
+      <a href="#about">about</a>
+      <a href="#skills">skills</a>
+      <a href="#projects">projects</a>
+      <a href="#contact">contact</a>
+    </nav>
+  </div>
+</div>
+
+<main class="shell">
+  <header class="hero">
+    <div class="terminal">
+      <div class="line"><span class="prompt">$</span><span class="cmd">whoami</span></div>
+      <div class="out">
+        <span class="name">Kanstantsin Khraneka</span>
+        <span class="role">Machine Learning &amp; Data Analyst &mdash; Warsaw, PL</span>
+      </div>
+      <div class="line"><span class="prompt">$</span><span class="cmd">cat summary.md</span></div>
+      <div class="out">
+        <p class="tagline">
+          Computer Science student building classification models and data
+          pipelines &mdash; feature engineering, gradient boosting, and reporting
+          automation in Python and SQL.<span class="cursor" aria-hidden="true"></span>
+        </p>
+      </div>
+      <div class="cta-row">
+        <a class="btn btn-primary" href="#projects">View projects</a>
+        <a class="btn btn-ghost" href="#" download>&darr; Resume</a>
+        <a class="btn btn-ghost" href="https://github.com/kRAK0S-s15" target="_blank" rel="noopener">GitHub &#8599;</a>
+      </div>
+    </div>
+  </header>
+
+  <section id="about" class="about">
+    <p class="eyebrow">about</p>
+    <p>
+      Aspiring Data Analyst / Machine Learning Engineer with hands-on experience
+      in exploratory data analysis, feature engineering, and predictive modeling.
+      Comfortable across the stack &mdash; from cleaning a raw CSV to tuning a
+      gradient-boosted classifier to writing up what the model actually found.
+      Currently applying that to credit-risk modeling, workflow automation, and
+      reporting projects while finishing a CS degree.
+    </p>
+    <dl class="meta">
+      <dt>education</dt><dd>B.Sc. Computer Science &mdash; Vistula University, Warsaw (2025&ndash;2028)</dd>
+      <dt>based in</dt><dd>Warsaw, Poland</dd>
+      <dt>languages</dt><dd>English (B2) &middot; Polish (B2) &middot; Russian (native)</dd>
+    </dl>
+  </section>
+
+  <section id="skills">
+    <p class="eyebrow">skills</p>
+    <div class="skills-grid">
+      <div>
+        <svg viewBox="-20 -15 340 330" role="img" aria-labelledby="radar-title radar-desc" style="width:100%; height:auto;">
+          <title id="radar-title">Self-rated skill proficiency</title>
+          <desc id="radar-desc">Radar chart across five skill areas: Python and Pandas, ML modeling, SQL and data, statistics, and tools and infrastructure.</desc>
+          <polygon points="150.0,122.5 176.2,141.5 166.2,172.2 133.8,172.2 123.8,141.5" fill="none" stroke="var(--border)" stroke-width="1"/>
+          <polygon points="150.0,95.0 202.3,133.0 182.3,194.5 117.7,194.5 97.7,133.0" fill="none" stroke="var(--border)" stroke-width="1"/>
+          <polygon points="150.0,67.5 228.5,124.5 198.5,216.7 101.5,216.7 71.5,124.5" fill="none" stroke="var(--border)" stroke-width="1"/>
+          <polygon points="150.0,40.0 254.6,116.0 214.7,239.0 85.3,239.0 45.4,116.0" fill="none" stroke="var(--border)" stroke-width="1.25"/>
+          <line x1="150" y1="150" x2="150.0" y2="40.0" stroke="var(--border)" stroke-width="1"/>
+          <line x1="150" y1="150" x2="254.6" y2="116.0" stroke="var(--border)" stroke-width="1"/>
+          <line x1="150" y1="150" x2="214.7" y2="239.0" stroke="var(--border)" stroke-width="1"/>
+          <line x1="150" y1="150" x2="85.3" y2="239.0" stroke="var(--border)" stroke-width="1"/>
+          <line x1="150" y1="150" x2="45.4" y2="116.0" stroke="var(--border)" stroke-width="1"/>
+          <polygon points="150.0,56.5 233.7,122.8 194.0,210.5 101.5,216.7 85.1,128.9"
+                    fill="var(--accent)" fill-opacity="0.18" stroke="var(--accent)" stroke-width="2"/>
+          <circle cx="150.0" cy="56.5" r="4" fill="var(--accent)"/>
+          <circle cx="233.7" cy="122.8" r="4" fill="var(--accent)"/>
+          <circle cx="194.0" cy="210.5" r="4" fill="var(--accent)"/>
+          <circle cx="101.5" cy="216.7" r="4" fill="var(--accent)"/>
+          <circle cx="85.1" cy="128.9" r="4" fill="var(--accent)"/>
+          <g class="mono" font-size="11" fill="var(--muted)">
+            <text x="150.0" y="30" text-anchor="middle">Python &amp; Pandas</text>
+            <text x="262" y="113" text-anchor="start">ML Modeling</text>
+            <text x="220" y="262" text-anchor="start">SQL &amp; Data</text>
+            <text x="80" y="262" text-anchor="end">Statistics</text>
+            <text x="38" y="113" text-anchor="end">Tools &amp; Infra</text>
+          </g>
+        </svg>
+        <p class="radar-caption">self-rated proficiency &mdash; illustrative values, to confirm with Kanstantsin</p>
+      </div>
+      <div class="skills-list">
+        <h3>tools &amp; infrastructure</h3>
+        <div class="tag-list">
+          <span class="tag">Git</span>
+          <span class="tag">Docker</span>
+          <span class="tag">Linux / SSH</span>
+          <span class="tag">CI/CD basics</span>
+          <span class="tag">Scikit-learn</span>
+          <span class="tag">CatBoost</span>
+          <span class="tag">Matplotlib / Seaborn</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="projects">
+    <p class="eyebrow">projects</p>
+    <div class="project-grid">
+
+      <article class="card">
+        <div class="card-head">
+          <h3>Student Performance Prediction &mdash; CatBoost Classifier</h3>
+          <a class="link" href="https://github.com/kRAK0S-s15/student-performance-pred" target="_blank" rel="noopener">github &#8599;</a>
+        </div>
+        <p class="desc">
+          3-class exam-performance classifier (low / medium / high) on a
+          10,000-row student dataset. IQR-based outlier removal, engineered
+          interaction / efficiency / threshold / nonlinear features, tuned
+          CatBoost with class weighting for imbalance.
+        </p>
+        <div class="stat-row">
+          <div class="stat"><span class="num">10,000</span><span class="label">rows</span></div>
+          <div class="stat"><span class="num">3</span><span class="label">classes</span></div>
+          <div class="stat"><span class="num">800 / d8</span><span class="label">iterations / depth</span></div>
+          <div class="stat"><span class="num pending">[F1 pending]</span><span class="label">weighted F1</span></div>
+        </div>
+        <div class="badge-row">
+          <span class="badge">Python</span><span class="badge">Marimo</span>
+          <span class="badge">Pandas</span><span class="badge">CatBoost</span>
+          <span class="badge">Scikit-learn</span>
+        </div>
+      </article>
+
+      <article class="card">
+        <div class="card-head">
+          <h3>Credit Risk Analysis &mdash; German Credit Dataset</h3>
+          <span class="link pending">[repo link pending]</span>
+        </div>
+        <p class="desc">
+          EDA and feature engineering on a 1,000-record, 21-feature credit
+          dataset (age binning, categorical encoding, missing-value
+          imputation) to predict loan default. Compared Logistic Regression
+          and Gradient Boosting with class-balanced weighting and tuned
+          decision thresholds.
+        </p>
+        <div class="stat-row">
+          <div class="stat"><span class="num">79%</span><span class="label">ROC-AUC</span></div>
+          <div class="stat"><span class="num">72%</span><span class="label">accuracy</span></div>
+          <div class="stat"><span class="num">77%</span><span class="label">recall (default class)</span></div>
+        </div>
+        <div class="badge-row">
+          <span class="badge">Python</span><span class="badge">Scikit-learn</span>
+          <span class="badge">Pandas</span>
+        </div>
+      </article>
+
+    </div>
+  </section>
+
+  <footer id="contact">
+    <p class="eyebrow">contact</p>
+    <div class="contact-row">
+      <a href="mailto:mr.khraneko@gmail.com">mr.khraneko@gmail.com</a>
+      <a href="https://github.com/kRAK0S-s15" target="_blank" rel="noopener">github.com/kRAK0S-s15</a>
+      <a href="#">[add LinkedIn]</a>
+    </div>
+  </footer>
+</main>

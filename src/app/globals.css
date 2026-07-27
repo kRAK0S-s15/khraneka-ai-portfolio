@@ -1,26 +1,87 @@
 @import "tailwindcss";
+@custom-variant dark (&:where(.dark, .dark *));
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --bg: #EDF1EF;
+  --surface: #E3E9E6;
+  --surface-2: #D8E0DC;
+  --fg: #1B211E;
+  --muted: #5B6560;
+  --accent: #8A520D;
+  --accent-2: #005f8f;
+  --metric: #2e7602;
+  --border: rgba(27, 33, 30, 0.14);
+  --shadow: rgba(27, 33, 30, 0.10);
+  /* Decorative "window chrome" traffic-light dots only — not data, exempt from
+     the categorical dataviz palette rules, so kept constant across themes. */
+  --dot-red: #d9776b;
+  --dot-yellow: #d9b95c;
+}
+
+.dark {
+  --bg: #14120F;
+  --surface: #1D1A15;
+  --surface-2: #262119;
+  --fg: #EDE6D6;
+  --muted: #9C9282;
+  --accent: #E8A33D;
+  --accent-2: #00A9BC;
+  --metric: #7FA65C;
+  --border: rgba(237, 230, 214, 0.14);
+  --shadow: rgba(0, 0, 0, 0.45);
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-fg: var(--fg);
+  --color-muted: var(--muted);
+  --color-accent: var(--accent);
+  --color-accent-2: var(--accent-2);
+  --color-metric: var(--metric);
+  --color-border: var(--border);
+  --color-dot-red: var(--dot-red);
+  --color-dot-yellow: var(--dot-yellow);
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --font-serif: ui-serif, "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, "Times New Roman", serif;
+  --font-mono: ui-monospace, "SF Mono", "JetBrains Mono", "Fira Code", Menlo, Consolas, "Liberation Mono", monospace;
+
+  --text-xs: 0.75rem;
+  --text-sm: 0.875rem;
+  --text-base: 1.0625rem;
+  --text-lg: 1.25rem;
+  --text-xl: 1.5rem;
+  --text-2xl: 2rem;
+  --text-3xl: 2.75rem;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-serif);
+  font-size: var(--text-base);
+  line-height: 1.6;
+}
+
+a:focus-visible,
+button:focus-visible,
+[tabindex]:focus-visible {
+  outline: 2px solid var(--accent-2);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+@keyframes blink {
+  50% {
+    opacity: 0;
+  }
 }
