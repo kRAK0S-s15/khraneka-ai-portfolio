@@ -1,5 +1,9 @@
+"use client";
+
 import Link from "next/link";
 import { Badge } from "@/components/ui/Badge";
+import { strings } from "@/content/strings";
+import { useLocale } from "@/components/locale-provider";
 import type { Project } from "@/lib/types";
 
 export function ProjectCard({
@@ -10,13 +14,14 @@ export function ProjectCard({
   /** h3 when nested under a "# projects" h2 (homepage); h2 on the standalone /projects listing, which has its own h1. */
   headingLevel?: "h2" | "h3";
 }) {
+  const { locale } = useLocale();
   const Heading = headingLevel;
   return (
     <article className="rounded-lg border border-border bg-surface p-6">
       <div className="flex flex-wrap items-baseline justify-between gap-4">
         <Heading className="font-serif text-lg font-semibold">
           <Link href={`/projects/${project.slug}`} className="text-fg no-underline hover:text-accent-2">
-            {project.title}
+            {project.title[locale]}
           </Link>
         </Heading>
         {project.repoUrl ? (
@@ -26,22 +31,24 @@ export function ProjectCard({
             rel="noopener"
             className="whitespace-nowrap font-mono text-sm"
           >
-            github &#8599;
+            {strings.projects.github[locale]}
           </a>
         ) : (
-          <span className="whitespace-nowrap font-mono text-sm italic text-muted">[repo link pending]</span>
+          <span className="whitespace-nowrap font-mono text-sm italic text-muted">
+            {strings.projects.repoPending[locale]}
+          </span>
         )}
       </div>
 
-      <p className="mt-2.5 max-w-[65ch] font-serif">{project.description}</p>
+      <p className="mt-2.5 max-w-[65ch] font-serif">{project.description[locale]}</p>
 
       <div className="my-4 flex flex-wrap gap-6 font-mono">
         {project.stats.map((stat) => (
-          <div key={stat.label} className="[font-variant-numeric:tabular-nums]">
+          <div key={stat.label.en} className="[font-variant-numeric:tabular-nums]">
             <span className={`block text-lg ${stat.pending ? "text-sm italic text-muted" : "text-metric"}`}>
               {stat.value}
             </span>
-            <span className="text-xs tracking-[0.03em] text-muted">{stat.label}</span>
+            <span className="text-xs tracking-[0.03em] text-muted">{stat.label[locale]}</span>
           </div>
         ))}
       </div>

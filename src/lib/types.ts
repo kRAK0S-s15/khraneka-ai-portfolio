@@ -1,14 +1,16 @@
+import type { LocalizedText } from "./i18n";
+
 export type Stat = {
-  label: string;
+  label: LocalizedText;
   value: string;
   pending?: boolean;
 };
 
 export type Project = {
   slug: string;
-  title: string;
-  summary: string;
-  description: string;
+  title: LocalizedText;
+  summary: LocalizedText;
+  description: LocalizedText;
   repoUrl?: string;
   repoPending?: boolean;
   liveUrl?: string;
@@ -25,7 +27,14 @@ export type ExperienceItem = {
   bullets: string[];
 };
 
+// Already resolved to a single language — what RadarChart renders.
 export type SkillAxis = {
   label: string;
   value: number; // 0-100, self-rated
+};
+
+// Source data shape, before a locale picks one label string.
+export type LocalizedSkillAxis = {
+  label: LocalizedText;
+  value: number;
 };
