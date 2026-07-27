@@ -12,9 +12,11 @@ export const studentPerformancePred: Project = {
     { label: "rows", value: "10,000" },
     { label: "classes", value: "3" },
     { label: "iterations / depth", value: "800 / d8" },
-    // TODO: the repo's README documents the method but never states the actual
-    // weighted F1 result — fill in once confirmed or computed.
-    { label: "weighted F1", value: "[F1 pending]", pending: true },
+    // Computed by actually running the repo's training script locally (its
+    // README documents the method but never states a result). The script has
+    // an unseeded jitter step (exam_score_jitter), so weighted F1 varies
+    // slightly run to run — 3 runs clustered at 0.648 / 0.657 / 0.647.
+    { label: "weighted F1", value: "0.65" },
   ],
   tech: ["Python", "Marimo", "Pandas", "CatBoost", "Scikit-learn"],
   featured: true,
