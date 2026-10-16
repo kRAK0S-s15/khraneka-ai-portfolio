@@ -1,6 +1,10 @@
-export function Badge({ children }: { children: string }) {
+export function Badge({ children, planned = false }: { children: string; planned?: boolean }) {
   return (
-    <span className="rounded border border-border px-[0.55em] py-[0.25em] font-mono text-xs text-muted">
+    <span
+      className={`inline-flex items-center rounded-chip border border-border bg-bg/40 px-2.25 py-0.75 font-mono text-label leading-normal text-muted ${
+        planned ? "border-dashed" : ""
+      }`}
+    >
       {children}
     </span>
   );

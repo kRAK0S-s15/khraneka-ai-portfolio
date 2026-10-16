@@ -3,15 +3,29 @@
 
 :root {
   --bg: #EDF1EF;
-  --surface: #E3E9E6;
-  --surface-2: #D8E0DC;
+  --surface: #F7F9F8;
+  --surface-2: #E3E9E6;
   --fg: #1B211E;
-  --muted: #5B6560;
+  --muted: #4F5954;
   --accent: #8A520D;
+  --accent-hover: #6F4109;
   --accent-2: #005f8f;
-  --metric: #2e7602;
-  --border: rgba(27, 33, 30, 0.14);
+  --metric: #2A6B02;
+  --border: rgba(27, 33, 30, 0.16);
+  --border-strong: rgba(27, 33, 30, 0.34);
   --shadow: rgba(27, 33, 30, 0.10);
+  --shadow-lg: rgba(27, 33, 30, 0.22);
+  /* Status pill fills: accent / metric at low alpha. Pills always carry an
+     icon or a word too, never colour alone. */
+  --wip-bg: rgba(138, 82, 13, 0.11);
+  --done-bg: rgba(42, 107, 2, 0.11);
+  /* Empty part of progress bars, and chart gridlines. */
+  --track: #D6DEDA;
+  --grid: rgba(27, 33, 30, 0.10);
+  /* Single-series bar colour. Light = accent-2; dark is one step darker than
+     accent-2 so it sits inside the dataviz validator's dark lightness band
+     (validate_palette.js: L 0.48-0.67, contrast >= 3:1 on both surfaces). */
+  --chart: #005f8f;
   /* Decorative "window chrome" traffic-light dots only — not data, exempt from
      the categorical dataviz palette rules, so kept constant across themes. */
   --dot-red: #d9776b;
@@ -20,15 +34,23 @@
 
 .dark {
   --bg: #14120F;
-  --surface: #1D1A15;
-  --surface-2: #262119;
+  --surface: #1F1C17;
+  --surface-2: #2A251D;
   --fg: #EDE6D6;
-  --muted: #9C9282;
+  --muted: #A89E8D;
   --accent: #E8A33D;
+  --accent-hover: #F0B55E;
   --accent-2: #00A9BC;
   --metric: #7FA65C;
-  --border: rgba(237, 230, 214, 0.14);
+  --border: rgba(237, 230, 214, 0.16);
+  --border-strong: rgba(237, 230, 214, 0.34);
   --shadow: rgba(0, 0, 0, 0.45);
+  --shadow-lg: rgba(0, 0, 0, 0.65);
+  --wip-bg: rgba(232, 163, 61, 0.14);
+  --done-bg: rgba(127, 166, 92, 0.16);
+  --track: #383128;
+  --grid: rgba(237, 230, 214, 0.10);
+  --chart: #00A6B9;
 }
 
 @theme inline {
@@ -38,9 +60,16 @@
   --color-fg: var(--fg);
   --color-muted: var(--muted);
   --color-accent: var(--accent);
+  --color-accent-hover: var(--accent-hover);
   --color-accent-2: var(--accent-2);
   --color-metric: var(--metric);
   --color-border: var(--border);
+  --color-border-strong: var(--border-strong);
+  --color-wip-bg: var(--wip-bg);
+  --color-done-bg: var(--done-bg);
+  --color-track: var(--track);
+  --color-grid: var(--grid);
+  --color-chart: var(--chart);
   --color-dot-red: var(--dot-red);
   --color-dot-yellow: var(--dot-yellow);
 
@@ -48,28 +77,126 @@
   --font-mono: ui-monospace, "SF Mono", "JetBrains Mono", "Fira Code", Menlo, Consolas, "Liberation Mono", monospace;
 
   --text-xs: 0.75rem;
+  --text-label: 0.8125rem; /* 13px: eyebrows, stat labels, chips, pills */
   --text-sm: 0.875rem;
+  --text-md: 0.9375rem; /* 15px: terminal block */
   --text-base: 1.0625rem;
   --text-lg: 1.25rem;
+  --text-card: 1.3125rem; /* 21px: card titles */
   --text-xl: 1.5rem;
+  --text-name: 1.625rem; /* 26px: hero name */
   --text-2xl: 2rem;
+  --text-display: 2.625rem; /* 42px: project page h1 (2xl on mobile) */
   --text-3xl: 2.75rem;
+
+  --radius-chip: 4px;
+  --radius-btn: 6px;
+  --radius-card: 10px;
+
+  --container-page: 880px;
+
+  --shadow-rest: 0 1px 2px var(--shadow);
+  --shadow-lift: 0 14px 30px -18px var(--shadow-lg);
+  --shadow-terminal: 0 10px 28px -16px var(--shadow-lg);
+
+  --animate-rise: rise 0.5s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  --animate-blink: blink 1.1s steps(1) infinite;
 }
 
-body {
-  background: var(--bg);
-  color: var(--fg);
-  font-family: var(--font-serif);
-  font-size: var(--text-base);
-  line-height: 1.6;
+@layer base {
+  body {
+    background: var(--bg);
+    color: var(--fg);
+    font-family: var(--font-serif);
+    font-size: var(--text-base);
+    line-height: 1.6;
+    text-rendering: optimizeLegibility;
+  }
+
+  h1,
+  h2,
+  h3 {
+    text-wrap: balance;
+  }
+
+  p,
+  dd,
+  li {
+    text-wrap: pretty;
+  }
+
+  a {
+    color: var(--accent-2);
+    text-underline-offset: 3px;
+  }
+
+  a:hover {
+    color: var(--accent);
+  }
+
+  a:focus-visible,
+  button:focus-visible,
+  [tabindex]:focus-visible {
+    outline: 2px solid var(--accent-2);
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+
+  ::selection {
+    background: var(--accent);
+    color: var(--bg);
+  }
+
+  code {
+    font-family: var(--font-mono);
+    font-size: 0.88em;
+    background: var(--surface-2);
+    padding: 1px 5px;
+    border-radius: var(--radius-chip);
+    overflow-wrap: anywhere;
+  }
+
+  /* Offset in-page anchors below the sticky header. */
+  [id] {
+    scroll-margin-top: 5rem;
+  }
 }
 
-a:focus-visible,
-button:focus-visible,
-[tabindex]:focus-visible {
-  outline: 2px solid var(--accent-2);
-  outline-offset: 3px;
-  border-radius: 2px;
+@layer components {
+  /* Whole-card link: the title link's ::after covers the card so the entire
+     card is one target, while other links in the card sit above it (z-1). */
+  .card-link::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: var(--radius-card);
+  }
+
+  /* Horizontal bar chart track. Gridlines are a repeating 1px gradient whose
+     period (--tick) is set inline from the chart's tick step; the ::before
+     stops at the axis maximum (--plot), so no lines run into the value labels. */
+  .bar-track {
+    position: relative;
+  }
+
+  .bar-track::before {
+    content: "";
+    position: absolute;
+    inset: 0 auto 0 0;
+    width: calc(var(--plot) + 1px);
+    background: linear-gradient(to right, var(--grid) 1px, transparent 1px) 0 0 / var(--tick) 100% repeat-x;
+    pointer-events: none;
+  }
+
+  .bar-track > * {
+    position: relative;
+  }
+
+  /* Secondary state (e.g. "redundant") — hatching, so it never relies on colour. */
+  .bar-hatch {
+    background: repeating-linear-gradient(135deg, var(--chart) 0 2px, transparent 2px 5px);
+    box-shadow: inset 0 0 0 1.5px var(--chart);
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -77,11 +204,29 @@ button:focus-visible,
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
   }
 }
 
 @keyframes blink {
   50% {
     opacity: 0;
+  }
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
   }
 }

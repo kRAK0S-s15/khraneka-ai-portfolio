@@ -2,6 +2,7 @@ import type { Project } from "@/lib/types";
 
 export const creditRiskAnalysis: Project = {
   slug: "credit-risk-analysis",
+  status: "complete",
   title: {
     en: "Credit Risk Analysis — German Credit Dataset",
     pl: "Analiza ryzyka kredytowego — German Credit Dataset",

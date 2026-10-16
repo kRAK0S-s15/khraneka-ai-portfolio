@@ -26,10 +26,10 @@ export function RadarChart({ axes, caption }: { axes: SkillAxis[]; caption?: str
   return (
     <figure className="m-0">
       <svg
-        viewBox="-90 -20 460 350"
+        viewBox="-180 -12 650 296"
         role="img"
         aria-labelledby="radar-title radar-desc"
-        className="w-full max-w-[320px]"
+        className="w-full max-w-[400px]"
       >
         <title id="radar-title">Self-rated skill proficiency</title>
         <desc id="radar-desc">
@@ -68,7 +68,7 @@ export function RadarChart({ axes, caption }: { axes: SkillAxis[]; caption?: str
           return <circle key={a.label} cx={x} cy={y} r={4} fill="var(--accent)" />;
         })}
 
-        <g fontFamily="var(--font-mono)" fontSize={11} fill="var(--muted)">
+        <g fontFamily="var(--font-mono)" fontSize={19} fill="var(--muted)">
           {axes.map((a, i) => {
             const [x, y] = point(i, n, 1.22);
             return (

@@ -1,6 +1,6 @@
 "use client";
 
-import { Eyebrow } from "@/components/ui/Eyebrow";
+import { Section } from "@/components/ui/Section";
 import { ProjectCard } from "@/components/projects/ProjectCard";
 import { projects } from "@/content/projects";
 import { strings } from "@/content/strings";
@@ -11,13 +11,12 @@ export function FeaturedProjects() {
   const featured = projects.filter((p) => p.featured);
 
   return (
-    <section id="projects" className="border-t border-border py-12">
-      <Eyebrow>{strings.nav.projects[locale]}</Eyebrow>
-      <div className="mt-6 grid gap-5">
+    <Section id="projects" title={strings.nav.projects[locale]} className="pb-16">
+      <div className="grid gap-6">
         {featured.map((project) => (
           <ProjectCard key={project.slug} project={project} />
         ))}
       </div>
-    </section>
+    </Section>
   );
 }

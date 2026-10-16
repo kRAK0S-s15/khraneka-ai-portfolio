@@ -1,9 +1,19 @@
-const CLASSES = "mb-4 flex items-baseline gap-2 font-mono text-xs font-normal tracking-[0.08em] text-muted";
+const CLASSES = "flex items-baseline gap-2 font-mono text-label font-normal leading-snug tracking-[0.08em] text-muted";
 
-export function Eyebrow({ children, as = "h2" }: { children: string; as?: "h1" | "h2" }) {
+export function Eyebrow({
+  children,
+  as = "h2",
+  id,
+  className = "mb-6",
+}: {
+  children: string;
+  as?: "h1" | "h2";
+  id?: string;
+  className?: string;
+}) {
   const Tag = as;
   return (
-    <Tag className={CLASSES}>
+    <Tag id={id} className={`${CLASSES} ${className}`}>
       <span aria-hidden="true" className="text-accent">
         #
       </span>

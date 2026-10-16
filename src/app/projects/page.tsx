@@ -9,7 +9,7 @@ import { site } from "@/content/site";
 
 export const metadata: Metadata = {
   title: `Projects — ${site.name}`,
-  description: "Machine learning and data analysis case studies.",
+  description: "Machine-learning case studies, from data cleaning to model evaluation.",
 };
 
 export default function ProjectsPage() {
@@ -18,9 +18,9 @@ export default function ProjectsPage() {
       <Header />
       <main>
         <Container>
-          <div className="py-12">
+          <div className="pt-12 pb-16 sm:pt-16">
             <ProjectsHeading />
-            <div className="mt-6 grid gap-5">
+            <div className="grid gap-6">
               {projects.map((project) => (
                 <ProjectCard key={project.slug} project={project} headingLevel="h2" />
               ))}
