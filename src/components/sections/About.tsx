@@ -1,7 +1,8 @@
 "use client";
 
-import { Eyebrow } from "@/components/ui/Eyebrow";
-import { site, education, languages } from "@/content/site";
+import { Section } from "@/components/ui/Section";
+import { FactsGrid } from "@/components/ui/FactsGrid";
+import { site, education, languages, alsoBuilt } from "@/content/site";
 import { strings } from "@/content/strings";
 import { useLocale } from "@/components/locale-provider";
 
@@ -10,19 +11,31 @@ export function About() {
   const edu = education[locale];
 
   return (
-    <section id="about" className="border-t border-border py-12">
-      <Eyebrow>{strings.nav.about[locale]}</Eyebrow>
-      <p className="max-w-[62ch] font-serif">{site.about[locale]}</p>
-      <dl className="mt-5 grid max-w-[46ch] grid-cols-[auto_1fr] gap-x-4 gap-y-1.5 font-mono text-sm text-muted">
-        <dt>{strings.about.education[locale]}</dt>
-        <dd className="m-0 text-fg">
-          {edu.degree} &mdash; {edu.school} ({edu.period})
-        </dd>
-        <dt>{strings.about.basedIn[locale]}</dt>
-        <dd className="m-0 text-fg">{site.location[locale]}</dd>
-        <dt>{strings.about.languages[locale]}</dt>
-        <dd className="m-0 text-fg">{languages[locale].join(" · ")}</dd>
-      </dl>
-    </section>
+    <Section id="about" title={strings.nav.about[locale]}>
+      <p className="m-0 max-w-[62ch] font-serif text-[1.125rem] leading-[1.65]">{site.about[locale]}</p>
+      <FactsGrid
+        className="mt-8"
+        minColumn="300px"
+        items={[
+          {
+            label: strings.about.education[locale],
+            value: (
+              <>
+                {edu.degree}
+                <span className="block text-muted">
+                  {edu.school} · {edu.period}
+                </span>
+              </>
+            ),
+          },
+          { label: strings.about.status[locale], value: edu.status },
+          { label: strings.about.basedIn[locale], value: site.location[locale] },
+          { label: strings.about.languages[locale], value: languages[locale].join(" · ") },
+        ]}
+      />
+      <p className="mt-6 mb-0 font-mono text-label leading-relaxed text-muted">
+        <span className="text-fg">{strings.about.alsoBuilt[locale]}:</span> {alsoBuilt[locale].join(" · ")}
+      </p>
+    </Section>
   );
 }
